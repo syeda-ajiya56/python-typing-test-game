@@ -1,0 +1,107 @@
+<!-- templates/practice.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Mode - Speed Typing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game-screen.css') }}">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="header-left">
+                <h1>Practice Mode</h1>
+            </div>
+            <div class="user-info">
+                <span class="nav-button">{{ session.username }}</span>
+                <a href="{{ url_for('game_modes') }}" class="nav-button">Back</a>
+            </div>
+        </div>
+
+        {% if not practice_active %}
+        <div class="word-list-selection">
+            <h2>Select Word List</h2>
+            <form action="{{ url_for('start_practice') }}" method="post" class="word-list-form">
+                <select name="word_list" class="word-list-select">
+                    <optgroup label="Difficulty Levels">
+                        <option value="easy">Easy Words</option>
+                        <option value="medium">Medium Words</option>
+                        <option value="hard">Hard Words</option>
+                    </optgroup>
+                    <optgroup label="Custom Lists">
+                        {% for list_name in word_lists.get('custom_lists', {}).keys() %}
+                        <option value="custom_{{ list_name }}">{{ list_name | replace('_', ' ') | title }}</option>
+                        {% endfor %}
+                    </optgroup>
+                </select>
+                <button type="submit" class="start-button">Start Practice</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="game-area">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-label">Words:</span>
+                    <span class="stat-value">{{ words_completed }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Accuracy:</span>
+                    <span class="stat-value">{{ accuracy }}%</span>
+                </div>
+                <div class="stat-item">
+                    <a href="{{ url_for('practice') }}" class="exit-practice">Change List</a>
+                </div>
+            </div>
+
+            <div class="word-display">
+                <div class="word-text">{{ current_word }}</div>
+            </div>
+
+            <form action="{{ url_for('submit_practice_word') }}" method="post" class="input-wrapper" id="wordForm">
+                <input type="text" 
+                       name="typed_word" 
+                       id="wordInput" 
+                       class="word-input" 
+                       autocomplete="off" 
+                       autocorrect="off" 
+                       autocapitalize="off" 
+                       spellcheck="false" 
+                       placeholder="Type the word here..."
+                       autofocus>
+                <button type="submit" class="submit-button">Submit</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Auto-focus input when available
+        const wordInput = document.getElementById('wordInput');
+        if (wordInput) {
+            wordInput.focus();
+        }
+
+        // Auto-submit on Enter key
+        const wordForm = document.getElementById('wordForm');
+        if (wordForm) {
+            wordForm.addEventListener('submit', function(e) {
+                const input = document.getElementById('wordInput');
+                if (!input.value.trim()) {
+                    e.preventDefault();
+                }
+            });
+
+            wordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    if (this.value.trim()) {
+                        wordForm.submit();
+                    }
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

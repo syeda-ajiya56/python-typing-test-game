@@ -1,0 +1,224 @@
+<!-- templates/game.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Typing Game - {{ mode|title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game-screen.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <div class="header-left">
+                <h1>Speed Typing</h1>
+                <div class="game-mode">{{ mode|title }} Mode</div>
+            </div>
+            <div class="user-controls">
+                <span class="nav-button">{{ session['username'] }}</span>
+                <a href="{{ url_for('game_modes') }}" class="nav-button">Back</a>
+            </div>
+        </header>
+
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="timer">
+                    {% if mode in ['classic', 'time_attack'] %}
+                        {{ time_left }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </div>
+                <div class="stat-label">Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value" id="wpm">0</div>
+                <div class="stat-label">WPM</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value" id="accuracy">100</div>
+                <div class="stat-label">Accuracy %</div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="word-display-container">
+                <div class="word-display">
+                    <div class="word-text" id="current-word">{{ current_word }}</div>
+                    <div class="typing-indicator">⌨️</div>
+                </div>
+                <div class="word-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="word-count">Word <span id="word-number">1</span> of {{ total_words +1 }}</div>
+                </div>
+            </div>
+
+            <div class="input-container">
+                <form id="word-form" method="POST" action="{{ url_for('submit_word') }}">
+                    <input type="hidden" name="game_id" value="{{ game_id }}">
+                    <div class="input-wrapper">
+                        <input type="text" 
+                               id="word-input" 
+                               name="typed_word"
+                               autocomplete="off" 
+                               autofocus
+                               placeholder="Type the word here...">
+                        <div class="input-border"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gameMode = '{{ mode }}';
+        const gameId = '{{ game_id }}';
+        let timeLeft = parseInt('{{ time_left }}');
+        let wordsTyped = 0;
+        let correctWords = 0;
+        let startTime = moment();
+        let isGameActive = true;
+        const totalWords = parseInt('{{ total_words }}');
+
+        const timerElement = document.getElementById('timer');
+        const wpmElement = document.getElementById('wpm');
+        const accuracyElement = document.getElementById('accuracy');
+        const currentWordElement = document.getElementById('current-word');
+        const wordInput = document.getElementById('word-input');
+        const wordForm = document.getElementById('word-form');
+        const progressFill = document.querySelector('.progress-fill');
+        const wordNumber = document.getElementById('word-number');
+
+        function updateProgress(wordsTyped) {
+            const progress = (wordsTyped / totalWords) * 100;
+            progressFill.style.width = `${progress}%`;
+            wordNumber.textContent = wordsTyped + 1;
+        }
+
+        function formatTime(seconds) {
+            if (gameMode === 'word_count') {
+                // Format as MM:SS.ms for stopwatch
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}:${remainingSeconds.toFixed(1)}`;
+            } else {
+                // Format as SS for countdown
+                return Math.ceil(seconds);
+            }
+        }
+
+        function updateTimer() {
+            if (!isGameActive) return;
+            
+            if (gameMode === 'word_count') {
+                // Stopwatch mode
+                const elapsed = moment().diff(startTime, 'seconds', true);
+                timerElement.textContent = formatTime(elapsed);
+            } else {
+                // Countdown modes
+                timeLeft -= 0.1; // Update every 100ms for smoother countdown
+                timerElement.textContent = formatTime(timeLeft);
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }
+        }
+
+        function updateStats() {
+            const elapsedMinutes = moment().diff(startTime, 'seconds') / 60;
+            const wpm = Math.round((correctWords / elapsedMinutes) || 0);
+            const accuracy = Math.round((correctWords / (wordsTyped || 1)) * 100);
+
+            wpmElement.textContent = wpm;
+            accuracyElement.textContent = accuracy;
+        }
+
+        function endGame() {
+            isGameActive = false;
+            wordInput.disabled = true;
+
+            const formData = new FormData();
+            formData.append('game_id', gameId);
+            formData.append('wpm', wpmElement.textContent);
+            formData.append('accuracy', accuracyElement.textContent);
+            formData.append('time', gameMode === 'word_count' ? 
+                moment().diff(startTime, 'seconds', true) : timeLeft);
+
+            fetch('/game_over', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = data.redirect_url;
+            });
+        }
+
+        wordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!isGameActive) return;
+
+            const formData = new FormData(wordForm);
+            
+            fetch('/submit_word', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.game_over || wordsTyped + 1 >= totalWords) {
+                    endGame();
+                    return;
+                }
+
+                if (data.correct) {
+                    correctWords++;
+                    if (gameMode === 'time_attack') {
+                        timeLeft += 2; // Add 2 seconds for correct word
+                    }
+                }
+                
+                wordsTyped++;
+                updateProgress(wordsTyped);
+                
+                currentWordElement.classList.add('changing');
+                setTimeout(() => {
+                    currentWordElement.textContent = data.next_word;
+                    currentWordElement.classList.remove('changing');
+                }, 150);
+                
+                wordInput.value = '';
+                updateStats();
+            });
+        });
+
+        // Real-time input validation
+        wordInput.addEventListener('input', function() {
+            const currentWord = currentWordElement.textContent.toLowerCase();
+            const typedWord = this.value.toLowerCase();
+            
+            if (currentWord.startsWith(typedWord)) {
+                this.style.color = '#00ff00';
+            } else {
+                this.style.color = '#ff3333';
+            }
+        });
+
+        // Start timers
+        setInterval(updateTimer, 100); // Update every 100ms for smoother countdown
+        setInterval(updateStats, 1000);
+
+        // Initialize progress
+        updateProgress(0);
+        wordInput.focus();
+    </script>
+</body>
+</html>

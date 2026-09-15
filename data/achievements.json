@@ -1,0 +1,44 @@
+{
+    "speed_demon": {
+        "name": "Speed Demon",
+        "description": "Reach 100 WPM in any game mode",
+        "icon": "⚡",
+        "requirement": 100,
+        "type": "wpm"
+    },
+    "accuracy_master": {
+        "name": "Accuracy Master",
+        "description": "Complete a game with 100% accuracy",
+        "icon": "🎯",
+        "requirement": 100,
+        "type": "accuracy"
+    },
+    "word_warrior": {
+        "name": "Word Warrior",
+        "description": "Type 1000 correct words",
+        "icon": "⌨️",
+        "requirement": 1000,
+        "type": "total_words"
+    },
+    "consistent_typer": {
+        "name": "Consistent Typer",
+        "description": "Maintain 95% average accuracy",
+        "icon": "📊",
+        "requirement": 95,
+        "type": "avg_accuracy"
+    },
+    "game_master": {
+        "name": "Game Master",
+        "description": "Complete 50 games",
+        "icon": "🎮",
+        "requirement": 50,
+        "type": "games"
+    },
+    "multiplayer_champion": {
+        "name": "Multiplayer Champion",
+        "description": "Win 10 multiplayer games",
+        "icon": "🏆",
+        "requirement": 10,
+        "type": "multiplayer_wins"
+    }
+}

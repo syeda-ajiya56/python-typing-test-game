@@ -1,0 +1,79 @@
+{
+    "easy": [
+        "the", "be", "to", "of", "and", "that", "have", "for", "not", "with",
+        "you", "this", "but", "his", "from", "they", "say", "her", "she", "will",
+        "one", "all", "would", "there", "their", "what", "out", "about", "who",
+        "get", "which", "when", "make", "can", "like", "time", "just", "him",
+        "know", "take", "people", "into", "year", "your", "good", "some", "could",
+        "them", "see", "other", "than", "then", "now", "look", "only", "come",
+        "its", "over", "think", "also", "back", "after", "use", "two", "how",
+        "our", "work", "first", "well", "way", "even", "new", "want", "because",
+        "any", "these", "give", "day", "most", "us", "are", "was", "were", "been"
+    ],
+    "medium": [
+        "programming", "developer", "application", "software", "database",
+        "framework", "interface", "algorithm", "variable", "function",
+        "repository", "deployment", "debugging", "compiler", "runtime",
+        "middleware", "frontend", "backend", "fullstack", "responsive",
+        "iteration", "recursive", "parameter", "instance", "prototype",
+        "inheritance", "polymorphism", "encapsulation", "abstraction",
+        "validation", "integration", "deployment", "architecture", "component",
+        "dependency", "optimization", "refactoring", "versioning", "workflow",
+        "namespace", "library", "package", "module", "template", "syntax",
+        "semantic", "dynamic", "static", "compile", "execute", "implement",
+        "initialize", "configure", "generate", "validate", "process", "render",
+        "request", "response", "session", "cookie", "cache", "query", "index"
+    ],
+    "hard": [
+        "authentication", "implementation", "configuration", "development",
+        "synchronization", "serialization", "virtualization", "optimization",
+        "infrastructure", "microservices", "orchestration", "containerization",
+        "parallelization", "authentication", "authorization", "encryption",
+        "decentralization", "scalability", "reliability", "maintainability",
+        "interoperability", "compatibility", "accessibility", "functionality",
+        "sustainability", "accountability", "vulnerability", "specification",
+        "initialization", "documentation", "standardization", "visualization",
+        "representation", "classification", "interpretation", "identification",
+        "transformation", "customization", "modernization", "normalization",
+        "internationalization", "localization", "personalization", "optimization",
+        "parameterization", "systematization", "categorization", "organization"
+    ],
+    "custom_lists": {
+        "programming_terms": [
+            "algorithm", "variable", "function", "database", "interface",
+            "class", "object", "method", "property", "inheritance",
+            "polymorphism", "encapsulation", "abstraction", "constructor",
+            "destructor", "parameter", "argument", "return", "boolean",
+            "string", "integer", "float", "array", "list", "dictionary",
+            "tuple", "set", "stack", "queue", "tree", "graph", "hash",
+            "pointer", "reference", "null", "undefined", "exception",
+            "try", "catch", "finally", "async", "await", "promise",
+            "callback", "event", "listener", "handler", "middleware",
+            "framework", "library", "package", "module", "import"
+        ],
+        "science_terms": [
+            "hypothesis", "experiment", "theory", "observation", "analysis",
+            "molecule", "atom", "electron", "proton", "neutron",
+            "chemistry", "physics", "biology", "geology", "astronomy",
+            "evolution", "genetics", "ecosystem", "climate", "energy",
+            "force", "mass", "velocity", "acceleration", "gravity",
+            "temperature", "pressure", "volume", "density", "reaction",
+            "catalyst", "enzyme", "protein", "cell", "tissue", "organ",
+            "system", "species", "population", "community", "habitat",
+            "adaptation", "mutation", "selection", "radiation", "fusion",
+            "fission", "quantum", "relativity", "thermodynamics", "entropy"
+        ],
+        "tech_companies": [
+            "Microsoft", "Apple", "Google", "Amazon", "Facebook",
+            "Netflix", "Tesla", "Intel", "AMD", "Nvidia",
+            "Oracle", "Salesforce", "Adobe", "Twitter", "LinkedIn",
+            "Spotify", "Uber", "Airbnb", "PayPal", "Square",
+            "Slack", "Zoom", "Discord", "GitHub", "GitLab",
+            "Docker", "Kubernetes", "Redis", "MongoDB", "PostgreSQL",
+            "React", "Angular", "Vue", "Node", "Python",
+            "JavaScript", "TypeScript", "Java", "Swift", "Kotlin",
+            "Ruby", "PHP", "Go", "Rust", "Scala",
+            "Unity", "Unreal", "Blender", "Maya", "Photoshop"
+        ]
+    }
+}
