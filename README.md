@@ -90,18 +90,8 @@ Open `http://127.0.0.1:5000` in your browser.
 ├── main.py
 └── requirements.txt
 ```
+## Project Ownership
 
-## Push to GitHub
+This project was designed and developed by **Ajiya Shaukat**. I retain the rights to the original source code, design, and project implementation.
 
-After creating an empty repository on GitHub, run:
-
-```powershell
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
-git push -u origin main
-```
-
-Replace `YOUR_USERNAME` and `YOUR_REPOSITORY` with your GitHub details.
+© 2026 Ajiya Shaukat. All rights reserved.
